@@ -1,0 +1,66 @@
+<script src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+<script>
+    class Createmap {
+        constructor (location) {
+            this.location = location;
+            this.initMap()
+            this.setEvent()
+            this.addController()
+        }
+
+        /* 初始化地图 */
+        initMap () {
+            let {
+                container,
+                size,
+                x,
+                y
+            } = this.location;
+            if (/^[^a-zA-Z]/.test(container)) {
+                this.container = document.querySelector(container)
+            } else {
+                this.container = document.getElementById(container)
+            }
+            let map = new BMap.Map(container); //=> 在指定容器中创建一个地图
+            let point = new BMap.Point(x, y) // => 定义 一个中心点坐标
+            map.centerAndZoom(point, size) // 设定地图的中心点和坐标并将地图显示在指定容器中
+            this.map = map;
+        }
+
+        /* 向地图设置事件 */
+        setEvent () {
+            this.map.enableDragging(); // 启用地图拖拽事件, 默认的
+            this.map.enableScrollWheelZoom(); // 启用地图滚轮放大缩小
+            this.map.enableDoubleClickZoom(); // 启用鼠标双击放大
+            this.map.enableKeyboard(); // 启用键盘上下左右键移动地图
+        }
+
+        /* 添加地图控件 */
+        addController () {
+            /* 地图缩放控件 */
+            let ctrl_nav = new BMap.NavigationControl({
+                anchor:BMAP_ANCHOR_TOP_LEFT,
+                type:BMAP_NAVIGATION_CONTROL_LARGE
+            })
+            /* 缩略图控件 */
+            let ctrl_ove = new BMap.OverviewMapControl({
+                anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+                isOpen: 1
+            })
+            /* 比例尺控件 */
+            let ctrl_sca = new BMap.ScaleControl({
+                anchor: BMAP_ANCHOR_BOTTOM_LEFT
+            })
+            this.map.addControl(ctrl_nav)
+            this.map.addControl(ctrl_ove)
+            this.map.addControl(ctrl_sca)
+        }
+    }
+
+    new Createmap({
+        container: 'myMap',
+        size: 17,
+        x: 130.071387,
+        y: 20.575315
+    })
+</script>
